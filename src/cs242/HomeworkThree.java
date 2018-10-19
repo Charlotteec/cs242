@@ -18,23 +18,48 @@ import java.util.Scanner;
  *
  * Visible data fields: none.
  *
- * Visible methods: public static void main(String[] args) public static void
- * quickSort(int[] A, int p, int r) public static ArrayList<Integer>
- * BucketSort(int[] A) public static int partition(int[]A, int p, int r) public
- * static ArrayList<Integer> sort(ArrayList<Integer>, A)
+ * Visible methods: public static void main(String[] args) 
+ * public static void quickSort(int[] A, int p, int r) 
+ * public static ArrayList<Integer> BucketSort(int[] A) 
+ * public static int partition(int[]A, int p, int r) 
+ * public static ArrayList<Integer> sort(ArrayList<Integer>, A)
+ * public static void TestOne(int size, int r)
+ * public static void TestTwo()
  * 
- *
- *
- * Remarks I will do the rest soon 
- *
  * 
+ * QuickSort: 
+ * | 	|10		| 100 	| 1000	| 100000 | 1000000 | 10000000 |
+ * | 2	|7213	|109399 |220687	|1028397 |14136764 |170109216 |
+ * | 6	|12825	|260899	|224674	|1281858 |16716468 |202665828 |
+ * | 18	|12700	|222462	|185437	|2012731 |24957489 |286705602 |
+ * | 54	|12987	|449774	|300799	|3775262 |94065726 |786964309 |
+ * |162 |12800	|66525	|554148	|10765376|161386420|1633895952|
+ * |486 |13374	|68462	|4906696|34368056|491218948|3416503287|
+ * 
+ * BucketSort:
+ * | 	|10		| 100 	| 1000	| 100000 | 1000000 | 10000000 |
+ * | 2	|176375	|1233458|5018870|13217905|111579829|2138726561|
+ * | 6	|134487	|5182195|3365139|11062037|95771621 |1436702488|
+ * | 18	|426111	|941597 |2416142|6552840 |23553369 |356019190 |
+ * | 54	|157387 |607110 |1720782|7211400 |43094077 |338868924 |
+ * |162 |264474 |668873 |2789766|5311507 |47008351 |338345338 |
+ * |486 |122225 |529623 |2951577|5735256 |15824920 |279226291 |
+ *
+ * Remarks:
+ * 
+ * This table shows some interesting things. I would expect that quickSort and BucketSort both would
+ * increase in time as the n increased, which is shown in this data. Additionally, I expected both sorts 
+ * to increase in time as r increased. However, while quick sort acted as expected, bucket sort got faster 
+ * the more repetitions there were. It did follow my expectations and get slower with respect to n, but this
+ * is an interesting observation. As we sort each individual list in bucket sort though, it makes sense 
+ * it would be faster to sort lists that are all the same number, than lists of different numbers. 
  * 
  * Sources:
  * https://www.csc.depauw.edu/~dharms/CS1-Myro-Java/BlueJ_Projects-F11/SortingAndSearching/InsertionSort.java
  *
  *************************************************************************/
 
-public class HomeworkThree {
+public class AssignmentThree {
 
 	private static ArrayList<Integer> sort(ArrayList<Integer> arr) {
 		int val;
@@ -115,6 +140,108 @@ public class HomeworkThree {
 		}
 	}
 
+	public static void testOne(int size, int r) {
+		// create the array
+		double[] numbers = new double[size];
+		int[] numberz = new int[size];
+		int i = 0;
+		int j = 0;
+		while (i < size) {
+			// generate a random number between -10 and 10 and store it in array
+			int temp = (int) (Math.random() * (size));
+			// System.out.println("temp: " + temp);
+			// generate a random number for amount of repititions
+			int reps = (int) (Math.random() * r);
+			// System.out.println("r: " + reps);
+			while (j < reps && i < size) {
+				numbers[i] = temp;
+				numberz[i] = temp;
+				// System.out.println( numberz[i]);
+				j++;
+				i++;
+			}
+			j = 0;
+		}
+		System.out.println("n: " + size + " r: " + r);
+		long startTime = System.nanoTime();
+		// quickSort the numbers
+		quickSort(numberz, 0, numberz.length - 1);
+
+		// display the time elapsed
+		long now = System.nanoTime();
+		System.out.println("QuickSort: " + (now - startTime));
+
+		// System.out.println("The time taken by QuickSort with size " + size+ " and
+		// repititions "+ r + " is " + (now - startTime) + " nanoseconds.");
+
+		// prepare to measure the time elapsed again
+		startTime = System.nanoTime();
+		BucketSort(numbers);
+		// display the time elapsed
+		now = System.nanoTime();
+		System.out.println("BucketSort: " + (now - startTime));
+	}
+
+	public static void testTwo() {
+		int size = 10;
+		for (int i1 = 0; i1 < 6; i1++) {
+
+			int r =2;
+			for (int i2 = 0; i2 < 6; i2++) {
+
+				// create the array
+				double[] numbers = new double[size];
+				int[] numberz = new int[size];
+
+				int i = 0;
+				int j = 0;
+				while (i < size) {
+					// generate a random number between -10 and 10 and store it in array
+					int temp = (int) (Math.random() * (size));
+					// System.out.println("temp: " + temp);
+					// generate a random number for amount of repititions
+					int reps = (int) (Math.random() * r);
+					// System.out.println("r: " + reps);
+					while (j < reps && i < size) {
+						numbers[i] = temp;
+						numberz[i] = temp;
+						// System.out.println( numberz[i]);
+						j++;
+						i++;
+					}
+					j = 0;
+				}
+				System.out.println("n: " + size + " r: " + r);
+				// store the time now
+				long startTime = System.nanoTime();
+				// quickSort the numbers
+				quickSort(numberz, 0, numberz.length - 1);
+
+				// display the time elapsed
+				long now = System.nanoTime();
+				System.out.println("QuickSort: " + (now - startTime));
+
+				// System.out.println("The time taken by QuickSort with size " + size+ " and
+				// repititions "+ r + " is " + (now - startTime) + " nanoseconds.");
+
+				// prepare to measure the time elapsed again
+				startTime = System.nanoTime();
+				BucketSort(numbers);
+				// display the time elapsed
+				now = System.nanoTime();
+				System.out.println("BucketSort: " + (now - startTime));
+
+				// System.out.println("The time taken by BucketSort is " + (System.nanoTime() -
+				// startTime) + " nanoseconds.");
+				r = r * 3;
+
+			}
+			size = size * 10;
+
+		}
+
+	}
+
 	public static void main(String[] args) {
 
 		// input array size from user
@@ -126,45 +253,11 @@ public class HomeworkThree {
 		int r = input.nextInt();
 		System.out.println();
 		
-
-		// create the array
-		double[] numbers = new double[size];
-		int[] numberz = new int[size];
-
-		int i = 0;
-		int j = 0;
-		while (i < size) {
-			// generate a random number between -10 and 10 and store it in array
-			int temp = (int) (Math.random() * (size));
-//			System.out.println("temp: " + temp);
-			// generate a random number for amount of repititions
-			int reps = (int) (Math.random() * r);
-//			System.out.println("r: " + reps);
-			while(j<reps && i <size) {
-				numbers[i] = temp;
-				numberz[i] = temp;
-//				System.out.println( numberz[i]);
-				j++;
-				i++;
-			}
-			j=0;
-		}
-		// store the time now
-		long startTime = System.nanoTime();
-		// quickSort the numbers
-		quickSort(numberz, 0, numberz.length - 1);
-
-		// display the time elapsed
-		long now = System.nanoTime();
-
-		System.out.println("The time taken by QuickSort is " + (now - startTime) + " nanoseconds.");
-
-		// prepare to measure the time elapsed again
-		startTime = System.nanoTime();
-		BucketSort(numbers);
-		// display the time elapsed
-		System.out.println("The time taken by BucketSort is " + (System.nanoTime() - startTime) + " nanoseconds.");
+		System.out.println("test one: ");
+		testOne(size, r);
+		
+		//System.out.println("test two: ");
+		//testTwo();
 
 	}
-
 }
